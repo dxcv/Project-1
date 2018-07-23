@@ -2,7 +2,7 @@
 """
 Created on Fri Jul 06 14:03:17 2018
 
-@将结果写入execl
+@将VaR结果写入execl
 
 @author: 陈祥明
 """

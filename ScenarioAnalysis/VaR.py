@@ -63,7 +63,7 @@ else:
 
     #
 
-        # 输出至Excel
+     #    输出至Excel
     path_position = Constant.path_position
     path_position_save = Constant.path_position_save
     wb = openpyxl.load_workbook(path_position)
@@ -76,13 +76,13 @@ else:
     wb.save(path_position_save)
     wb.close()
 
-    #
+
 
 
     # 生成目标组合仓位情况
     results = {}
-    for x in range(0, len(target_list)):
-        results[target_list[x]] = positions[target_list[x]].groupby('InstrumentID').sum()
+    for x in target_list:
+        results[x] = positions[x].groupby('InstrumentID').sum()
 
     # print(positions['ALL'])
 
@@ -103,8 +103,8 @@ else:
     #print VaR_df
 
 
-    #
-    #
+
+
     ###################   获取单支票的VaR、市值、及敞口,写入数据库   ##################
     VaRset = VaR_df['ALL']
     MV_Exposet = MV_Expo_df['ALL']
