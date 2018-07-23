@@ -8,7 +8,7 @@
 # import ScenarioAnalysis
 # from SQLLINK import MSSQL
 # from ScenarioAnalysis import Constant
-# from ScenarioAnalysis import Ge
+
 import sys
 # sys.path.append(r'D:\CXM\Project_New\SQLLINK')
 # sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
