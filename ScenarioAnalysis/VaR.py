@@ -16,10 +16,10 @@ import MSSQL
 sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
 import Constant
 import GetPosition
-import Calculators
+import Calculator
 import DataClean
 
-#####################################获取当日部门整体仓位情况##################################
+#################################获取当日部门整体仓位情况##############################
 date = Constant.date
 dbsa = MSSQL.DB_ScenarioAnalysis()
 target_list = Constant.targetID_list  # 目标组合
@@ -93,7 +93,7 @@ else:
         df_mv_expo = Calculator.PortfolioMvOrExpo(results[x], date)
         MV_Expo_df[x] = df_mv_expo
 
-    ###################################         计算VaR       ###############################
+    ############################         计算VaR       ##########################
     VaR_df = {}
     for y in target_list:
         VaR_df[y] = Calculator.PortfolioVaR(MV_Expo_df[y], date)
@@ -105,7 +105,7 @@ else:
 
     #
     #
-    ########################   获取单支票的VaR、市值、及敞口,写入数据库   ####################
+    ###################   获取单支票的VaR、市值、及敞口,写入数据库   ##################
     VaRset = VaR_df['ALL']
     MV_Exposet = MV_Expo_df['ALL']
     var_record_single = []
@@ -127,7 +127,7 @@ else:
            # var_record_single.append(c)
 
 
-    # ################################获取组合VaR、市值及敞口###################################
+    # ##############################获取组合VaR及敞口#################################
     #
     # 获取VaR记录
     var_record_portfolio = {}
