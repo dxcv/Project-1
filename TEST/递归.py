@@ -25,46 +25,17 @@ data = pd.DataFrame(Dataset,columns=['InstrumentID', 'Totalposition', 'direction
 df_empty = pd.DataFrame(columns=['InstrumentID', 'Totalposition', 'direction', 'portfolioID', 'parentID'])
 
 
-#
-# def getportfolioIDbyparentID(ID, df=data):
-#     df0 = df[df['parentID']==ID]
-#     nameli = np.array(df0[['portfolioID']].drop_duplicates()).tolist()
-#     return [x[0] for x in nameli]
-#
-# def getposition(IDli, df=data):
-#     for x in IDli:
-#         df1 = df[df['parentID'] == x]
-#         name_li1 = np.array(df1[['portfolioID']].drop_duplicates()).tolist()
-#         # if isinstance(IDli, list) is True:
-#         if name_li1[0] == []:
-#             return IDli
-#         else:
-#             li = [x[0] for x in name_li1]
-#             IDli.extend(name_li1)
-#             return IDli.extend(getportfolioIDbyparentID(IDli))
-#     return
-#     # return IDli
 
-# df0 = df[df['portfolioID'] == ID]
-# print(df0)
 def Getposition(ID, df=data):
     df1 = df[df['parentID'] == ID]
     name_li = np.array(df1[['portfolioID']].drop_duplicates()).tolist()
     li = [x[0] for x in name_li]
-    # print(li)
-    # print(li)s
     if li == []:
         return df1
     else:
         return df1.append(list(map(Getposition, li)))
 
-
-
-# nali = getportfolioIDbyparentID('cta')
-# print(type(nali))
-# print(nali)
-
-res = Getposition('cta')
+res = Getposition('alpha_300').append(data[data['portfolioID']=='alpha_300'])
 print(res)
 print(res.shape[0])
 # print(res)
