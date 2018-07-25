@@ -32,6 +32,7 @@
           <option value="Constant" />
           <option value="MSSQL" />
           <option value="constant" />
+          <option value="SASQL" />
         </list>
       </option>
     </inspection_tool>

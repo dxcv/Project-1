@@ -42,7 +42,7 @@ class DataCenter_Commodity(DB):
 
 class Commodity(Base):
     __tablename__ = "Commodity"
-    Date = Column(DATETIME, primary_key=True)
+    Date = Column(DATE, primary_key=True)
     CategoryID = Column(VARCHAR(20), primary_key=True)
     CategoryName = Column(NVARCHAR(50), nullable=False)
     ProductID = Column(VARCHAR(20), primary_key=True)
@@ -56,14 +56,10 @@ class Commodity(Base):
     Data = Column(FLOAT, nullable=True)
     Source = Column(NVARCHAR(50), nullable=True)
     UpdateSource = Column(NVARCHAR(50), nullable=True)
-    UpdateTime = Column(DateTime, server_default=func.now())
+    UpdateTime = Column(DATE, server_default=func.now())
     Remark = Column(NVARCHAR(100), nullable=True)
 
-# if __name__ == "__main__":
-#     for i in range(1, 1000):
-#         a = DataCenter_Commodity().session.query(Commodity).all()
-#         print(a)
-#         print("访问数据库第"+str(i)+"次")
+
 
 class DataCenter_Analysis(DB):
     def __init__(self):
@@ -153,8 +149,14 @@ class VaR_Record(Base):
 
 
 
-if __name__ == "__main__":
-    a = DataCenter_Analysis().session.query(HistData_Stock).filter(HistData_Stock.InstrumentID=='000001').all()
-    print(a)
-    print(type(a[0].Date))
+# if __name__ == "__main__":
+#     a = DataCenter_Analysis().session.query(HistData_Stock).filter(HistData_Stock.InstrumentID=='000001').all()
+#     print(a)
+#     print(type(a[0].Date))
     # print(type(a[0].RecordDate))
+
+if __name__ == "__main__":
+    for i in range(1, 1000):
+        a = DataCenter_Commodity().session.query(Commodity).all()
+        print(a)
+        print("访问数据库第"+str(i)+"次")
