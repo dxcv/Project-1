@@ -31,9 +31,8 @@ Stock_Info = dbsa.ExecQuery(query0)
 for i in Stock_Info:
     a = uqer.DataAPI.MktEqudGet(ticker=i[0], tradeDate=date, field="tradeDate,ticker,openPrice,highestPrice,lowestPrice,closePrice,chgPct", pandas="1")
     print("查询代码为" + i[0] + "股票数据成功")
-    for j in range(0, a.shape[0]):
-        query1 = "insert into HistData_Stock(Date,InstrumentID,openprice,highestprice,lowestprice,closeprice,PriceChangePercent) values(\'{0}\',\'{1}\',{2},{3},{4},{5},{6})".format(a.iloc[j]['tradeDate'], a.iloc[j]['ticker'], a.iloc[j]['openPrice'], a.iloc[j]['highestPrice'], a.iloc[j]['lowestPrice'], a.iloc[j]['closePrice'], a.iloc[j]['chgPct'])
-        dbsa.ExecNonQuery(query1)
+    query1 = "insert into HistData_Stock(Date,InstrumentID,openprice,highestprice,lowestprice,closeprice,PriceChangePercent) values(\'{0}\',\'{1}\',{2},{3},{4},{5},{6})".format(a.iloc[0]['tradeDate'], a.iloc[0]['ticker'], a.iloc[0]['openPrice'], a.iloc[0]['highestPrice'], a.iloc[0]['lowestPrice'], a.iloc[0]['closePrice'], a.iloc[0]['chgPct'])
+    dbsa.ExecNonQuery(query1)
     print("写入代码为"+i[0]+"股票数据成功")
 
 # 测试用
