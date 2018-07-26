@@ -8,7 +8,7 @@ import sys
 sys.path.append(r'D:\CXM\Project_New\SQLLINK')
 sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
 import MSSQL
-import Constant
+
 
 dbsa = MSSQL.DB_ScenarioAnalysis()
 
