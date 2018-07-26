@@ -19,7 +19,7 @@ dbsa = MSSQL.DB_ScenarioAnalysis()
 date = Constant.date
 
 # 清空原有表内数据
-query = "delete from HistData_Stock where Date=\'{}\'".format(date)
+query = "delete from HistData_Stock where Date='{}'".format(date)
 dbsa.ExecNonQuery(query)
 
 # 获取股票代码
