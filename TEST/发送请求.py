@@ -23,4 +23,8 @@ from urllib.error import URLError
 
 # 高级用法
 
-username =
+url = "https://www.zhihu.com/signin?next=%2Fexplore"
+req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36'})
+response = urllib.request.urlopen(req)
+content = response.read().decode('utf8')
+print(content)
