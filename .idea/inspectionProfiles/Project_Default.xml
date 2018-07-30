@@ -33,6 +33,7 @@
           <option value="MSSQL" />
           <option value="constant" />
           <option value="SASQL" />
+          <option value="TEST.爬虫.getlink.*" />
         </list>
       </option>
     </inspection_tool>

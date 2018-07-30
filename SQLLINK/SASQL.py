@@ -42,7 +42,7 @@ class DataCenter_Commodity(DB):
 
 class Commodity(Base):
     __tablename__ = "Commodity"
-    Date = Column(DATE, primary_key=True)
+    Date = Column(DateTime, primary_key=True)
     CategoryID = Column(VARCHAR(20), primary_key=True)
     CategoryName = Column(NVARCHAR(50), nullable=False)
     ProductID = Column(VARCHAR(20), primary_key=True)
@@ -56,7 +56,7 @@ class Commodity(Base):
     Data = Column(FLOAT, nullable=True)
     Source = Column(NVARCHAR(50), nullable=True)
     UpdateSource = Column(NVARCHAR(50), nullable=True)
-    UpdateTime = Column(DATE, server_default=func.now())
+    UpdateTime = Column(DateTime, server_default=func.now())
     Remark = Column(NVARCHAR(100), nullable=True)
 
 
@@ -160,3 +160,4 @@ if __name__ == "__main__":
         a = DataCenter_Commodity().session.query(Commodity).all()
         print(a)
         print("访问数据库第"+str(i)+"次")
+        # DataCenter_Analysis().session.close()
