@@ -31,6 +31,7 @@ Stock_Info = dbsa.ExecQuery(query0)
 # 获取A股当日数据并写入数据库
 for i in Stock_Info:
     a = uqer.DataAPI.MktEqudGet(ticker=i[0], tradeDate=date, field="tradeDate,ticker,openPrice,highestPrice,lowestPrice,closePrice,chgPct", pandas="1")
+    # print(a)
     # print("查询代码为" + i[0] + "股票数据成功")
     try:
         query1 = "insert into HistData_Stock(Date,InstrumentID,openprice,highestprice,lowestprice,closeprice,PriceChangePercent) values(\'{0}\',\'{1}\',{2},{3},{4},{5},{6})".format(a.iloc[0]['tradeDate'], a.iloc[0]['ticker'], a.iloc[0]['openPrice'], a.iloc[0]['highestPrice'], a.iloc[0]['lowestPrice'], a.iloc[0]['closePrice'], a.iloc[0]['chgPct'])
@@ -39,7 +40,7 @@ for i in Stock_Info:
         print("代码为"+i[0]+"的股票为新上市股票，无数据")
     else:
         dbsa.ExecNonQuery(query1)
-        # print("写入代码为"+i[0]+"股票数据成功")
+        print("写入代码为"+i[0]+"股票数据成功")
 
 # 测试用
 # a = uqer.DataAPI.MktEqudGet(ticker=Stock_Info[0][0], beginDate=u"20150101", endDate=today, field="tradeDate,ticker,secShortName,openPrice,highestPrice,lowestPrice,closePrice,chgPct", pandas="1")

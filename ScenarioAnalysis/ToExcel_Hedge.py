@@ -88,17 +88,26 @@ ws = wb['VaR']
 ws.cell(row=29, column=2).value = MV_Future['zz500'][1]
 ws.cell(row=30, column=2).value = MV_Stock['zz500']
 ws.cell(row=31, column=2).value = MV_Future['zz500'][2]
-ws.cell(row=32, column=2).value = MV_Stock['zz500']-MV_Future['zz500'][1]
+if MV_Future['zz500'][2]>0:
+    ws.cell(row=32, column=2).value = 0
+else:
+    ws.cell(row=32, column=2).value = MV_Stock['zz500']-MV_Future['zz500'][1]
 
 ws.cell(row=29, column=3).value = MV_Future['sz50'][1]
 ws.cell(row=30, column=3).value = MV_Stock['sz50']
 ws.cell(row=31, column=3).value = MV_Future['sz50'][2]
-ws.cell(row=32, column=3).value = MV_Stock['sz50']-MV_Future['sz50'][1]
+if MV_Future['sz50'][2]:
+    ws.cell(row=32, column=3).value = 0
+else:
+    ws.cell(row=32, column=3).value = MV_Stock['sz50']-MV_Future['sz50'][1]
 
 ws.cell(row=29, column=4).value = MV_Future['hs300'][1]
 ws.cell(row=30, column=4).value = MV_Stock['hs300']
 ws.cell(row=31, column=4).value = MV_Future['hs300'][2]
-ws.cell(row=32, column=4).value = MV_Stock['hs300']-MV_Future['hs300'][1]
+if MV_Future['hs300'][2]:
+    ws.cell(row=32, column=4).value = 0
+else:
+    ws.cell(row=32, column=4).value = MV_Stock['hs300'] - MV_Future['hs300'][1]
 
 wb.save(path)
 wb.close()

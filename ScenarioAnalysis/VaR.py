@@ -151,6 +151,6 @@ else:
     # 将组合的VaR、市值、敞口存入数据库
     for i in target_list:
         # print(target_list[i], var_record_portfolio[target_list[i]], mv_record_portfolio[target_list[i]], expo_record_portfolio[target_list[i]])
-        query = "insert into VaR_record(date,portfolioID,InstrumentID,productID,VaR_95,Marketvalue,Exposure) values(\'{0}\',\'{1}\',\'{2}\',\'{3}\',{4},{5},{6})".format(date, i, '无', 'portfolio', var_record_portfolio[i], mv_record_portfolio[i], expo_record_portfolio[i])
+        query = "insert into VaR_record(date,portfolioID,InstrumentID,productID,VaR_95,Marketvalue,Exposure) values('{0}','{1}','{2}','{3}',{4},{5},{6})".format(date, i, '无', 'portfolio', var_record_portfolio[i], mv_record_portfolio[i], expo_record_portfolio[i])
         dbsa.ExecNonQuery(query)
 

@@ -1,9 +1,10 @@
 """
 常量
 """
+from datetime import datetime
 import time
 #常用变量
-date = time.strftime('%Y%m%d', time.localtime())
+date = datetime.today().strftime('%Y%m%d')
 
 path_Data_Sorted = r'D:\CXM\Project_New\Commodity\Data\Data_Sorted_Wind.xlsx'
 

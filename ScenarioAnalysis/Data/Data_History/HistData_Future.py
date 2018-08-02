@@ -22,5 +22,5 @@ for m in range(0, len(productID)):
     hist = dbfmc.ExecQuery(query2)
     for n in range(1, len(hist)):
         pcp = (hist[n][7]*hist[n][11]/hist[n-1][7]/hist[n-1][11])-1
-        query = "insert into HistData_Future([algoID],[productID],[instrumentID],[tradingDate],[openPrice],[highPrice],[lowPrice],[closePrice],[volume],[turnover],[openInterestAccumulate],[multiplier],[updateTime],[pricechangepercent]) values({0},\'{1}\',\'{2}\',\'{3}\',{4},{5},{6},{7},{8},{9},{10},{11},\'{12}\',{13})".format(hist[n][0], hist[n][1], hist[n][2], hist[n][3], hist[n][4], hist[n][5], hist[n][6], hist[n][7], hist[n][8], hist[n][9], hist[n][10], hist[n][11], hist[n][12], pcp)
+        query = "insert into HistData_Future([algoID],[productID],[instrumentID],[tradingDate],[openPrice],[highPrice],[lowPrice],[closePrice],[volume],[turnover],[openInterestAccumulate],[multiplier],[updateTime],[pricechangepercent]) values({0},'{1}','{2}','{3}',{4},{5},{6},{7},{8},{9},{10},{11},'{12}',{13})".format(hist[n][0], hist[n][1], hist[n][2], hist[n][3], hist[n][4], hist[n][5], hist[n][6], hist[n][7], hist[n][8], hist[n][9], hist[n][10], hist[n][11], hist[n][12], pcp)
         dbsa.ExecNonQuery(query)

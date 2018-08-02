@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-从万得h获取数据并进行处理数据
+从万得更新数据数据
 """
 from WindPy import w
 import pandas as pd
 import numpy as np
+from datetime import datetime
 import sys
 import gc
 sys.path.append(r'D:\CXM\Project_New\Commodity')
@@ -17,6 +18,7 @@ import MSSQL
 
 # dbdc = SASQL.DataCenter_Commodity()
 # tbco = SASQL.Commodity
+today = constant.date
 dbdc = MSSQL.DB_DataCenter_Commodity()
 path = constant.path_Data_Sorted
 
@@ -68,7 +70,7 @@ w.start() # 启动Windpy
 
 for x in str_index_cut:
     # str_index = ','.join(j) # 拼接全部ItemID，用于查询数据
-    a = w.edb(x, '19000101', '20180801')
+    a = w.edb(x, today, today)
     df = DataCleanWind(a)
     del a
     gc.collect()
