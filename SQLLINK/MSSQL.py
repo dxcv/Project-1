@@ -31,21 +31,21 @@ class MSSQL(object):
 
     def __del__(self):  # 析构函数
         self.conn.close()
-
+        return
 #
 # class DB_VaR(MSSQL):
 #     def __init__(self):
-#         MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='20180515', db='VaR')
+#         MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='VaR')
 #
 
 class DB_ScenarioAnalysis(MSSQL):
     def __init__(self):
-        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='20180515', db='ScenarioAnalysis')
+        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='ScenarioAnalysis')
 
 
 class DB_DataCenter_Commodity(MSSQL):
     def __init__(self):
-        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='20180515', db='DataCenter_Commodity')
+        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='DataCenter_Commodity')
 
 
 class DB_Nurex(MSSQL):
@@ -59,7 +59,7 @@ class DB_datacenterfuturesnew(MSSQL):
 
 class DB_DataCenter_Analysis(MSSQL):
     def __init__(self):
-        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='20180515', db='DataCenter_Analysis')
+        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='DataCenter_Analysis')
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@
 用于计算市值、敞口、VaR
 """
 import pandas as pd
+from datetime import datetime,timedelta
 import sys
 sys.path.append(r'D:\CXM\Project_New\SQLLINK')
 sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
@@ -17,14 +18,17 @@ import DataClean
 # import Constant as co
 # import GetPosition
 
-# 获取当日日期,可以手动修改
 dbsa = MSSQL.DB_ScenarioAnalysis()
+#
+# def Daysago(x=200):
+#     daysago = datetime.today() + timedelta(-x)
+#     return daysago.strftime('%Y%m%d')
 
 
 # 用于计算的函数
 # 计算股票市值及敞口
 def StockValue(InstrumentID, position, position_net, Date):
-    query1 = "select closeprice from HistData_Stock where InstrumentID = \'{0}\' and Date=\'{1}\'".format(InstrumentID, Date)
+    query1 = "select closeprice from HistData_Stock where InstrumentID='{0}' and Date='{1}'".format(InstrumentID, Date)
     closeprice = dbsa.ExecQuery(query1)
     if closeprice == []:
         return 0, 0
@@ -38,9 +42,9 @@ def FutureValue(InstrumentID, position, position_net, Date):
     a = list(filter(str.isalpha, str(InstrumentID)))
     productID = ''.join(a).upper()
     # productID = str.join(a).upper()
-    query1 = "select SettlementPrice from MarketEod where InstrumentID = \'{0}\' and Date=\'{1}\'".format(InstrumentID, Date)
+    query1 = "select SettlementPrice from MarketEod where InstrumentID='{0}' and Date='{1}'".format(InstrumentID, Date)
     SettlementPrice = dbsa.ExecQuery(query1)
-    query2 = "select Multiplier from Future_Multiplier where ProductID = \'{0}\' and RecordDate = \'{1}\'".format(productID, Date)
+    query2 = "select Multiplier from Future_Multiplier where ProductID='{0}' and RecordDate='{1}'".format(productID, Date)
     m = dbsa.ExecQuery(query2)
     MV = SettlementPrice[0][0]*m[0][0]*position
     Expo = SettlementPrice[0][0]*m[0][0]*position_net
@@ -51,7 +55,7 @@ def FutureValue(InstrumentID, position, position_net, Date):
 # 股票
 def StockVaR(InstrumentID, Expo, Date, Interval=200):
     # 获取历史时间段的涨跌幅
-    query = "select top {0} PriceChangePercent from HistData_Stock where InstrumentID = \'{1}\'  and Date <= \'{2}\' order by Date desc".format(Interval, InstrumentID, Date)
+    query = "select top {0} PriceChangePercent from HistData_Stock where InstrumentID = '{1}'  and Date <= '{2}' order by Date desc".format(Interval, InstrumentID, Date)
     pcp = dbsa.ExecQuery(query)
     if pcp is []:
         pass
@@ -138,3 +142,5 @@ def PortfolioVaR(df, date):
 #
 #
 ##dbvar.close()
+
+

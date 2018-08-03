@@ -8,7 +8,7 @@ import time
 
 
 #常用变量
-date = '20180801'#time.strftime('%Y%m%d', time.localtime())
+date = time.strftime('%Y%m%d', time.localtime())
 
 portfolioID_list = ['ALL', 'alpha_prop', 'alpha_300', 'alpha_500', 'indexarb', 'indexarb2', 'macro', 'cta', 'stock']
 
