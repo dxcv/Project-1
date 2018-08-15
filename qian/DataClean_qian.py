@@ -7,23 +7,27 @@ Created on Fri Jul 06 17:38:49 2018
 from datetime import datetime
 import pandas as pd
 import numpy as np
-import openpyxl 
+from openpyxl import load_workbook
 path = r'D:\CXM\Project_New\qian\template.xlsx'
 
-source = pd.read_excel(io=path, sheet_name='1', header=0)
+excel = load_workbook(path)
+writer = pd.ExcelWriter(path,engine='openpyxl')
+writer.book=excel
 
-# data = source.groupby(source.index.map(lambda x: x.year))
-yearlist = ['2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018']
-wb = openpyxl.load_workbook(path)
-ws = wb['2']
-for i in yearlist:
-    df0 = source[source.index.year == i]
-    df1 = df0[(df0.index.month != 2) | (df0.index.day != 29)].copy() # 去掉2月29号
-    df1.fillna('#N/A', inplace=True)
-    a = np.array(df1).tolist()
-    for j in range(0, len(a)):
-        ws.cell(row=j+2, column=i+2).value = a[j][0]
+source = pd.read_excel(io=path,sheet_name='Source',header=0,index_col=0)
 
-wb.save(path)
-wb.close()
+# yearlist = source.index.year
 
+dfli = []
+for i in range(2004,2019):
+    df = source[source.index.year == i]
+    df.columns = [i]
+    df1 = pd.DataFrame(index=[x.strftime('%m-%d') for x in df.index],data=np.array(df[[i]]).tolist(),columns=[i])
+    df1.fillna('#N/A',inplace=True)
+    dfli.append(df1)
+
+result = pd.concat(dfli,axis=1,join='outer',sort=True)
+
+# result.to_excel(r'D:\CXM\Project_New\qian\template.xlsx',sheet_name='2',mode='a')
+result.to_excel(writer,'Cleaned')
+writer.save()
