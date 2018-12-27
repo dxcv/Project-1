@@ -48,13 +48,6 @@ class DataCenter_Commodity(DB):
         DB.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='DataCenter_Commodity')
 
 
-class Nurex(DB):
-    def __init__(self):
-        DB.__init__(self, host='10.63.6.220', user='intern', pwd='A12345678!', db='Nurex')
-
-class OptionContract(DB):
-    def __init__(self):
-        DB.__init__(self, host='10.63.6.78', user='sa', pwd='A12345678!', db='OptionContract')
 
 # class Commodity(Base):
 #     __tablename__ = "Commodity"
@@ -76,10 +69,6 @@ class OptionContract(DB):
 #     Remark = Column(NVARCHAR(100), nullable=True)
 #
 
-
-class DataCenter_Analysis(DB):
-    def __init__(self):
-        DB.__init__(self, host='127.0.0.1', user='sa', pwd='20180515', db='DataCenter_Analysis')
 
 # class Future_Multiplier(Base):
 #     __tablename__ = "Future_Multiplier"

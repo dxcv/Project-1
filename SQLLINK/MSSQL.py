@@ -38,40 +38,14 @@ class MSSQL(object):
 #         MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='VaR')
 #
 
-class DB_ScenarioAnalysis(MSSQL):
-    def __init__(self):
-        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='ScenarioAnalysis')
 
 
-class DB_DataCenter_Commodity(MSSQL):
-    def __init__(self):
-        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='DataCenter_Commodity')
-
-
-class DB_Nurex(MSSQL):
-    def __init__(self):
-        MSSQL.__init__(self, host='10.63.6.220', user='intern', pwd='A12345678!', db='Nurex')
-
-
-class DB_datacenterfuturesnew(MSSQL):
-    def __init__(self):
-        MSSQL.__init__(self, host='10.63.6.220', user='intern', pwd='A12345678!', db='datacenter_futures_new')
-
-class DB_DataCenter_Analysis(MSSQL):
-    def __init__(self):
-        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='DataCenter_Analysis')
-
-class DB_DataCenter_Uqer(MSSQL):
-    def __init__(self):
-        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='DataCenter_Uqer')
-
-
-if __name__ == "__main__":
-    print("test")
-    dbsa = DB_ScenarioAnalysis()
-    sql = "select top 1 * from positioneod"
-    for i in range(1, 1000):
-        print("==" + str(i) + "==")
-        rows = dbsa.ExecQuery(sql)
-        print(len(rows))
+# if __name__ == "__main__":
+    # print("test")
+    # dbsa = DB_ScenarioAnalysis()
+    # sql = "select top 1 * from positioneod"
+    # for i in range(1, 1000):
+    #     print("==" + str(i) + "==")
+    #     rows = dbsa.ExecQuery(sql)
+    #     print(len(rows))
 

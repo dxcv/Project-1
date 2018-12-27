@@ -38,15 +38,12 @@ class PostgreDB(object):
     def __del__(self):  # 析构函数
         self.session.close()
 
-class Alpha(PostgreDB):
-    def __init__(self):
-        PostgreDB.__init__(self, host='10.63.6.220:5432', user='tourist', pwd='A12345678!', db='alpha')
 
 
-
-if __name__ == "__main__":
-    dbal = Alpha()
-    print(dbal.conn)
-    query = "select top 1000 (*) from index_market order by trade_date desc"
-    df = dbal.ExecQuery(query)
-    print(df)
+#
+# if __name__ == "__main__":
+#     dbal = Alpha()
+#     print(dbal.conn)
+#     query = "select top 1000 (*) from index_market order by trade_date desc"
+#     df = dbal.ExecQuery(query)
+#     print(df)
