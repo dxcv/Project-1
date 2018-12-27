@@ -6,7 +6,7 @@
 #
 import openpyxl
 import sys
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import Constant
 import email.mime.multipart
 import email.mime.text
@@ -19,8 +19,8 @@ date = Constant.date
 
 
 msg = email.mime.multipart.MIMEMultipart()
-msg_to = ['nizh@dxzq.net.cn', 'wangxj@dxzq.net.cn', 'qiandm@dxzq.net.cn', 'luocx@dxzq.net.cn', 'zhubj@dxzq.net.cn', 'licheng@dxzq.net.cn']
-# msg_to = ['314281596@qq.com', '1872917132@qq.com', '570630387@qq.com'] # 测试用
+msg_to = ['nizh@dxzq.net.cn', 'wangxj@dxzq.net.cn', 'qiandm@dxzq.net.cn', 'luocx@dxzq.net.cn', 'zhubj@dxzq.net.cn','jiangkai@dxzq.net.cn']
+# msg_to = ['314281596@qq.com', '1872917132@qq.com'] # 测试用
 msg['from'] = "chen_xiangming@outlook.com"
 msg['to'] = ','.join(msg_to)
 msg['subject'] = 'VaR日报'+date
@@ -216,7 +216,7 @@ content = '''
 <p>
 注：<br />
 1、 所有VaR根据历史法生成，取过去200个交易日,置信区间为95%<br />
-2、  持仓数据来源为当日Nurex的flash持仓<br />
+2、 持仓数据来源为当日Nurex的flash持仓<br />
 3、 货币基金未纳入统计<br />
 </p>
 '''

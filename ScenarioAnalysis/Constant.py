@@ -32,3 +32,4 @@ path_var_save2 = ''.join(path_list2)
 
 path_position_save = ''.join(path_list)
 
+token = '07b082b1f42b91987660f0c2c19097bc3b10fa4b12f6af3274f82df930185f04'

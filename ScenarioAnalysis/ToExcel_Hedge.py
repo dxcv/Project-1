@@ -7,16 +7,16 @@ import pandas as pd
 import math
 import openpyxl
 import sys
-sys.path.append(r'D:\CXM\Project_New\SQLLINK')
+sys.path.append(r'D:\CXM\Project\SQLLINK')
 import MSSQL
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import Constant
 import Calculator
 
 date = Constant.date
 
 dbsa = MSSQL.DB_ScenarioAnalysis()
-query = "select * from PositionEod where AccountID in ('77772', '77773', '77774', '77775', '77776', '77777', '77778', '77779') and Date='{}'".format(date)
+query = "select * from PositionEod where AccountID in ('77772', '77773', '77774', '77775', '77776', '77777', '77778', '77779','7777402') and Date='{}'".format(date)
 source = dbsa.ExecQuery(query)
 
 Dataset = []
@@ -68,7 +68,7 @@ for x in SectorID:
 # print(MV_Stock)
 def hedge(stock, future):
     if stock > future[1]:
-        query1 = "select closePrice*multiplier from HistData_Future where tradingDate='{0}' and productID='{1}'".format(date, future[0])
+        query1 = "select closePrice*multiplier from HistData_Future_Continuing where tradingDate='{0}' and productID='{1}'".format(date, future[0])
         de = dbsa.ExecQuery(query1)
         query2 = "select Multiplier from Future_Multiplier where RecordDate='{0}' and productID='{1}'".format(date, future[0])
         m = dbsa.ExecQuery(query2)

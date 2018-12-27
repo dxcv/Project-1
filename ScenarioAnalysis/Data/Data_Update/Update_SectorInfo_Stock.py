@@ -3,17 +3,48 @@
 @author: 陈祥明
 从tushare导入板块信息
 """
+from uqer import Client,DataAPI
 import tushare as ts
 import sys
-sys.path.append(r'D:\CXM\Project_New\SQLLINK')
-import MSSQL
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+sys.path.append(r'D:\CXM\Project\SQLLINK')
+import SASQL
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import DataClean
 import Constant
 
-dbsa = MSSQL.DB_ScenarioAnalysis()
+Date = Constant.date
+dbsa = SASQL.ScenarioAnalysis()
 query = "delete from SectorInfo_Stock"
 dbsa.ExecNonQuery(query)
+
+login = Client(token=Constant.token)
+df = DataAPI.FundGet(etfLof="ETF",listStatusCd="L",field="",pandas="1")
+
+# df_ =df[(df.tradeAbbrName.str.contains('沪深300ETF')==True) | (df.tradeAbbrName.str.contains('中证500ETF')==True) | (df.tradeAbbrName.str.contains('上证50ETF')==True)]
+
+# 沪深300
+df_HS300 = df[(df.tradeAbbrName.str.contains('沪深300ETF')==True)][['ticker','tradeAbbrName']]
+df_HS300.columns = ['InstrumentID','InstrumentName']
+df_HS300.insert(0,'SectorName','沪深300')
+df_HS300.insert(0,'SectorID','hs300')
+df_HS300.to_sql('SectorInfo_Stock', dbsa.conn, if_exists='append', index=False, chunksize=1000)
+
+#中证500
+df_ZZ300 = df[(df.tradeAbbrName.str.contains('中证500ETF')==True)][['ticker','tradeAbbrName']]
+df_ZZ300.columns = ['InstrumentID','InstrumentName']
+df_ZZ300.insert(0,'SectorName','中证500ETF')
+df_ZZ300.insert(0,'SectorID','zz500')
+df_ZZ300.to_sql('SectorInfo_Stock', dbsa.conn, if_exists='append', index=False, chunksize=1000)
+
+# 上证50
+df_HZ50 = df[(df.tradeAbbrName.str.contains('上证50ETF')==True)][['ticker','tradeAbbrName']]
+df_HZ50.columns = ['InstrumentID','InstrumentName']
+df_HZ50.insert(0,'SectorName','上证50ETF')
+df_HZ50.insert(0,'SectorID','sz50')
+df_HZ50.to_sql('SectorInfo_Stock', dbsa.conn, if_exists='append', index=False, chunksize=1000)
+
+
+
 
 
 hs300 = ts.get_hs300s()
@@ -40,7 +71,6 @@ for n in c:
 
 # zz500 = ts.get_zz500s()
 # sz50 = ts.get_sz50s()
-#
 #
 #
 # print(hs300)

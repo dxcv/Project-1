@@ -11,11 +11,13 @@ import pandas as pd
 import numpy as np
 import openpyxl
 import sys
-sys.path.append(r'D:\CXM\Project_New\SQLLINK')
+sys.path.append(r'D:\CXM\Project\SQLLINK')
 import MSSQL
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+import SASQL
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import Constant
-import GetPosition
+# import GetPortfolio
+# from ScenarioAnalysis import Calculator
 import Calculator
 import DataClean
 
@@ -26,7 +28,7 @@ target_list = Constant.targetID_list  # 目标组合
 positions = {}
 
 # 获取全部门仓位情况
-query = 'select * from positionEod where Date=\'{}\' and portfolioID<>\'otc\''.format(date)
+query = "select * from positionEod where Date='{}' and portfolioID<>'otc'".format(date)
 Source = dbsa.ExecQuery(query)
 if Source == []:
     print('今日仓位数据尚未更新')
@@ -39,29 +41,53 @@ else:
 
 
     # 获取整个仓位情况，生成Dataframe，生成新列position，用于计算敞口
-    data = pd.DataFrame(Dataset, columns=['InstrumentID', 'Totalposition', 'direction', 'portfolioID', 'parentID'])
+    data = pd.DataFrame(Dataset, columns=['InstrumentID', 'Totalposition', 'direction', 'PortfolioID', 'ParentID'])
     data['position'] = data['Totalposition']
     data.loc[data['direction'] == '空', 'position'] = -data.loc[data['direction'] == '空', 'Totalposition']
     li = Constant.portfolioID_list  # portfolio的ID
 
-
-    def Getposition(ID, df=data):
-        df1 = df[df['parentID'] == ID]
-        name_li = np.array(df1[['portfolioID']].drop_duplicates()).tolist()
+    dbnu = SASQL.Nurex()
+    query = "select PortfolioID,ParentID from Portfolio where Product='prop'"
+    source = pd.read_sql(query, dbnu.conn, )
+    def Getportfolio(ID, df=source):  # 递归查询
+        df1 = df[df['ParentID'] == ID]
+        name_li = np.array(df1[['PortfolioID']].drop_duplicates()).tolist()
         li = [x[0] for x in name_li]
         if li == []:
             return df1
         else:
-            return df1.append(list(map(Getposition, li)))
+            return df1.append(list(map(Getportfolio, li)))
+    portfolio = {}
 
     for i in li:
         if i == 'ALL':
-            positions['ALL'] = data
+            portfolio['ALL'] = source
         else:
-            positions[i] = Getposition(i).append(data[data['portfolioID']==i])
-    positions["indexarb+indexarb2"] = positions['indexarb'].append(positions['indexarb2'])
+            portfolio[i] = Getportfolio(i).append(source[source['PortfolioID'] == i])
 
-    #
+    # portfolio["indexarb+indexarb2"] = portfolio['indexarb'].append(portfolio['indexarb2'])
+    portfolio["indexarb+indexarb2"] = pd.concat([portfolio['indexarb'],portfolio['indexarb2']])
+    # def Getposition(ID, df=data): #递归查询
+    #     df1 = df[df['parentID'] == ID]
+    #     name_li = np.array(df1[['portfolioID']].drop_duplicates()).tolist()
+    #     li = [x[0] for x in name_li]
+    #     if li == []:
+    #         return df1
+    #     else:
+    #         return df1.append(list(map(Getposition, li)))
+
+
+    # for i in li:
+    #     if i == 'ALL':
+    #         positions['ALL'] = data
+    #     else:
+    #         positions[i] = Getposition(i).append(data[data['portfolioID']==i])
+    # positions["indexarb+indexarb2"] = positions['indexarb'].append(positions['indexarb2'])
+
+
+    for i in target_list:
+        positions[i] = pd.merge(data,portfolio[i])
+        # print(positions[i])
 
      #    输出至Excel
     path_position = Constant.path_position
@@ -102,8 +128,8 @@ else:
     #print MV_Expo_df
     #print VaR_df
 
-
-
+    query_del = "delete from VaR_Record where date = '{}'".format(date)
+    dbsa.ExecNonQuery(query_del)
 
     ###################   获取单支票的VaR、市值、及敞口,写入数据库   ##################
     VaRset = VaR_df['ALL']

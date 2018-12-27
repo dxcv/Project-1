@@ -5,8 +5,8 @@
 """
 import sys
 import sys
-sys.path.append(r'D:\CXM\Project_New\SQLLINK')
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+sys.path.append(r'D:\CXM\Project\SQLLINK')
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import MSSQL
 import Constant
 
@@ -14,7 +14,7 @@ date = Constant.date
 dbnr = MSSQL.DB_Nurex()
 dbsa = MSSQL.DB_ScenarioAnalysis()
 
-query0 = "delete from MarketEod where Date=\'{}\'".format(date)
+query0 = "delete from MarketEod where Date='{}'".format(date)
 dbsa.ExecNonQuery(query0)
 
 query1 = "select [Date],[InstrumentID],[PrevClosePrice],[PrevSettlementPrice],[ClosePrice],[SettlementPrice] from MarketEod where Date=\'{}\'".format(date)

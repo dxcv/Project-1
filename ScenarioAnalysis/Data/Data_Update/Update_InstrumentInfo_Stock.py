@@ -5,8 +5,8 @@
 """
 import tushare as ts
 import sys
-sys.path.append(r'D:\CXM\Project_New\SQLLINK')
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+sys.path.append(r'D:\CXM\Project\SQLLINK')
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import MSSQL
 
 

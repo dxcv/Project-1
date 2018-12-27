@@ -9,9 +9,9 @@ Created on Fri Jul 06 14:03:17 2018
 
 import openpyxl
 import sys
-sys.path.append(r'D:\CXM\Project_New\SQLLINK')
+sys.path.append(r'D:\CXM\Project\SQLLINK')
 import MSSQL
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import Constant
 # import GetPosition
 # import Calculator

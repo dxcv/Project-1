@@ -4,8 +4,8 @@
 从Nerux导入PositionEod当日记录
 """
 import sys
-sys.path.append(r'D:\CXM\Project_New\SQLLINK')
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+sys.path.append(r'D:\CXM\Project\SQLLINK')
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import MSSQL
 import Constant
 
@@ -13,7 +13,7 @@ date = Constant.date
 dbsa = MSSQL.DB_ScenarioAnalysis()
 dbnr = MSSQL.DB_Nurex()
 
-query0 = "delete from PositionEod where Date=\'{}\'".format(date)
+query0 = "delete from PositionEod where Date='{}'".format(date)
 dbsa.ExecNonQuery(query0)
 
 query1 = "select [PositionEod].[Date],[PositionEod].AccountID,[PositionEod].[InstrumentID],[PositionEod].TotalPosition,[PositionEod].Portfolio,[PositionEod].[Direction],[Portfolio].[PortfolioID],Portfolio.ParentID,[Portfolio].[Product] from  [PositionEod],[Portfolio] where [PositionEod].Portfolio=[Portfolio].[PortfolioID] and [Portfolio].[Product]='prop' and [PositionEod].[Date]='{0}'".format(date)

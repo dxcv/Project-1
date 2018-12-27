@@ -5,7 +5,7 @@
 """
 
 from datetime import timedelta, datetime
-
+from openpyxl import load_workbook
 import os
 import pandas as pd
 import numpy as np
@@ -15,110 +15,150 @@ import math
 #
 from WindPy import w
 
-tradebegintime = str(datetime.today().year)+'-'+str(datetime.today().month)+'-'+str(datetime.today().day)+' 09:30:00'
-tradeendtime = str(datetime.today().year)+'-'+str(datetime.today().month)+'-'+str(datetime.today().day)+' 11:30:00'
 
+today = datetime.today().strftime('%Y%m%d')
+tradebegintime = today[0:4]+'-'+today[4:6]+'-'+today[6:]+' 09:30:00'
+tradeendtime = today[0:4]+'-'+today[4:6]+'-'+today[6:]+' 11:30:00'
 
 def endtime(st, period): # 获取截至时间，返回str  'xx:xx'
     t = int(st.split(':')[0])*60+int(st.split(':')[1])+period
     hour = math.floor(t/60)
-    min = t%60
-    if min == 0:
-        return str(hour)+':'+str(min)
+    min = t % 60
+    if len(str(min)) == 1:
+        return str(hour)+':0'+str(min)
     else:
-        return str(hour) + ':' + '00'
+        return str(hour) + ':' + str(min)
 def timeperiod(st, period): # 获取时间段，返回str  'xx:xx-xx:xx'
     t = int(st.split(':')[0])*60+int(st.split(':')[1])+period
     hour = math.floor(t/60)
-    min = t%60
-    if min == 0:
-        return st + '-' + str(hour) + ':' + '00'
+    min = t % 60
+    if len(str(min)) == 1:
+        return st + '-' + str(hour) + ':0' + str(min)
     else:
         return st+'-'+str(hour)+':'+str(min)
 
-def getamountperminute(i, bt=tradebegintime, et=tradeendtime):
-    windcode = w.htocode(i, "stocka").Data[0][0]
+def getamountperminute(codei, bt=tradebegintime, et=tradeendtime):
+    windcode = w.htocode(codei, "stocka").Data[0][0]
     winobj = w.wsi(windcode, 'amt', beginTime=bt, endTime=et)
-    df = pd.DataFrame(columns=['Data'] ,data=winobj.Data[0])
-    amountperminute = df.mean()['Data']
+    dfperminute = pd.DataFrame(columns=['Data'], data=winobj.Data[0])
+    amountperminute = dfperminute.mean()['Data']
     return amountperminute
 
 def getmultipleof5(x):
-    remainder = x%5
+    remainder = x % 5
     if remainder == 0:
         res = x
     else:
         res = x-remainder+5
     return res
 
+# 建立数据库连接
 conn = pymssql.connect(host='127.0.0.1', user='sa', password='ZAQ!2wsxCDE#', database='ScenarioAnalysis')
 cur = conn.cursor()
 
-#获取前一个交易日的日期
-today = datetime.today().strftime('%Y%m%d')
+# 获取前一个交易日
 getprivioustradedatequery = "SELECT  distinct top 1 [Date] FROM [ScenarioAnalysis].[dbo].[HistData_Stock] where Date<'{}' order by Date desc".format(today)
 cur.execute(getprivioustradedatequery)
 privioustradedate = cur.fetchall()[0][0]
 
-#读取今日互换的文件
-path = r'C:\Users\ZHAIYUE\Desktop'  #查找执行文件夹
+# 读取今日互换的文件
+filepath = r'C:\Users\Admin\Desktop\互换执行20180911合并.xlsx'  # 查找执行文件夹
+if_merge = input("是否合并（？y/n）:")
+path = r'Z:\personal\倪振豪\OptionTest\执行'
 files = os.listdir(path)
 for i in files:
     if today in i:
-        filepath = path+"\\"+i #获得当日执行文件路径
+        if if_merge == 'y':
+            filepath = path+"\\互换执行"+today + '合并.xlsx' # 获得当日执行文件路径
+        elif if_merge == 'n':
+            filepath = path + "\\互换执行" + today + '.xlsx' # 获得当日执行文件路径
     else:
         pass
 
+
+
+# filepath = r'C:\Users\ZHAIYUE\Desktop\互换执行20180828合并.xlsx'
 # 数据清洗
-df = pd.read_excel(filepath, converters={'证券代码': str}).fillna(0)
-df = df[df['证券代码'] != 0] #剔除掉不可见的空行0
-df['time'] = 0
-dataset = df.groupby('证券代码').sum()
-dataset['MV'] = 0
+source = pd.read_excel(filepath, converters={'证券代码': str}).fillna(0)
+source = source[source['证券代码'] != 0] # 剔除掉不可见的空行0
+Customer = np.array(source[['客户名称']].drop_duplicates().unstack()).tolist()
+source['time'] = 0
 
+dfli = []
+starttimeforsell = input("请输入起始时间：")
 
-for i in dataset.index:
-    query = "SELECT closeprice FROM HistData_Stock where Date='{}' and InstrumentID='{}'".format(privioustradedate, i)
-    cur.execute(query)
-    closeprice = cur.fetchall()[0][0]
-    dataset.loc[dataset.index == i, 'MV'] = dataset.loc[i]['数量']*closeprice
-
-condition = df.loc[df['证券代码'] == i, '方向'] == 'sell'
-tp = []
-
-starttimeforsell = input("请输入起始时间")
 w.start()
-for i in dataset.index:
-    condition = df.loc[df['证券代码'] == i, '方向'] == 'sell'
-    if condition.iloc[0] == True:
-        averageamount = getamountperminute(i)
-        timeneeded = getmultipleof5(math.ceil(dataset.loc[dataset.index == i, 'MV']/averageamount)*5)
-        df.loc[df['证券代码'] == i, 'time'] = timeperiod(starttimeforsell, timeneeded)
-        tp.append(timeneeded)
-    else:
+
+for client in Customer:
+    df = source[source['客户名称'] == client]
+    tp = []
+    dataset = df.groupby('证券代码').max()
+    dataset['MV'] = 0
+
+    for i in dataset.index:
+        query = "SELECT closeprice FROM HistData_Stock where Date='{}' and InstrumentID='{}'".format(privioustradedate,
+                                                                                                     i)
+        cur.execute(query)
+        closeprice = cur.fetchall()[0][0]
+        dataset.at[i, 'MV'] = dataset.at[i,'数量'] * closeprice
+    if df[df['方向'] == 'sell'].empty:
         pass
-
-if len(tp) == 0:
-    starttimeforbuy = starttimeforsell
-elif len(tp) == 1:
-    starttimeforbuy = endtime(starttimeforsell, tp[0])
-else:
-    a = tp.sort()
-    starttimeforbuy = endtime(starttimeforsell, tp.sort()[-1])
-
-
-
-for i in dataset.index:
-    condition = df.loc[df['证券代码'] == i, '方向'] == 'buy'
-    if condition.iloc[0] == True:
-        averageamount = getamountperminute(i)
-        timeneeded = getmultipleof5(math.ceil(dataset.loc[dataset.index == i, 'MV'] / averageamount)*5)
-        df.loc[df['证券代码'] == i, 'time'] = timeperiod(starttimeforbuy, timeneeded)
     else:
-        pass
+        for i in dataset.index:
+            if dataset.at[i,'MV'] <= 50000:
+                timeneeded = 1
+            else:
+                averageamount = getamountperminute(i)
+                try:
+                    timeneeded = getmultipleof5(math.ceil(dataset.at[i, 'MV']/averageamount)*4)
+                except ValueError as e:
+                    print('代码为' + i + '的股票没有交易')
+                else:
+                    twaptime = timeperiod(starttimeforsell, timeneeded)
+                    df.loc[(df['证券代码'] == i) & (df['方向'] == 'sell'),'time'] = twaptime
+                    print('客户为'+client+'代码为'+i+'方向为'+df.loc[df['证券代码'] == i,'方向']+'的Twap时间为'+twaptime)
+                    tp.append(timeneeded)
 
-df['TwapPrice'] = np.nan
-df['期末价格'] = np.nan
+
+    if len(tp) == 0:
+        starttimeforbuy = starttimeforsell
+    elif len(tp) == 1:
+        starttimeforbuy = endtime(starttimeforsell, tp[0])
+    else:
+        a = sorted(tp)
+        starttimeforbuy = endtime(starttimeforsell, a[-1])
+
+    if df[df['方向'] == 'buy'].empty:
+        pass
+    else:
+        for i in dataset.index:
+            if dataset.at[i,'MV'] <= 50000:
+                timeneeded = 1
+            else:
+                averageamount = getamountperminute(i)
+                try:
+                    timeneeded = getmultipleof5(math.ceil(dataset.at[i, 'MV'] / averageamount)*5)
+                except ValueError as e:
+                    print('代码为' + i + '的股票不能交易')
+                else:
+                    twaptime = timeperiod(starttimeforbuy, timeneeded)
+                    df.loc[(df['证券代码'] == i) & (df['方向'] == 'buy'),'time'] = twaptime
+                    print('客户为'+client+'代码为' + i + '方向为' + df.loc[df['证券代码'] == i, '方向'] + '的Twap时间为' + twaptime)
+
+    df['TwapPrice'].replace(0,np.nan)
+    df['期末价格'].replace(0,np.nan)
+
+    dfli.append(df)
 
 conn.close()
-df.to_excel(filepath,index=None)
+result = pd.concat(dfli)
+
+w.close()
+
+wb = load_workbook(filepath)
+ws = wb['成交纪录']
+for i in range(0,result.shape[0]):
+    ws.cell(row=i+2, column=10).value = result.iloc[i,9]
+
+wb.save(filepath)
+wb.close()

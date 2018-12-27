@@ -7,11 +7,11 @@
 import pandas as pd
 from datetime import datetime,timedelta
 import sys
-sys.path.append(r'D:\CXM\Project_New\SQLLINK')
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+sys.path.append(r'D:\CXM\Project\SQLLINK')
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import MSSQL
 import Constant
-import GetPosition
+# import GetPosition
 import Calculator
 import DataClean
 
@@ -69,7 +69,7 @@ def StockVaR(InstrumentID, Expo, Date, Interval=200):
 def FutureVaR(InstrumentID, Expo, Date, Interval=200):
     a = list(filter(str.isalpha, str(InstrumentID)))
     productID = ''.join(a).upper()
-    query = 'select top {0} PriceChangePercent from HistData_Future where productID = \'{1}\' and tradingDate <= \'{2}\' order by tradingDate desc'.format(Interval, productID, Date)
+    query = 'select top {0} PriceChangePercent from HistData_Future_Continuing where productID = \'{1}\' and tradingDate <= \'{2}\' order by tradingDate desc'.format(Interval, productID, Date)
     pcp = dbsa.ExecQuery(query)
     FV = [Expo*x[0] for x in pcp]
     # FV = Position*closeprice[0][0]*pcp[0][0]*m[0][0]

@@ -6,8 +6,8 @@
 
 
 import sys
-sys.path.append(r'D:\CXM\Project_New\SQLLINK')
-sys.path.append(r'D:\CXM\Project_New\ScenarioAnalysis')
+sys.path.append(r'D:\CXM\Project\SQLLINK')
+sys.path.append(r'D:\CXM\Project\ScenarioAnalysis')
 import MSSQL
 import Constant
 
@@ -15,10 +15,10 @@ date = Constant.date
 dbfu = MSSQL.DB_datacenterfuturesnew()
 dbsa = MSSQL.DB_ScenarioAnalysis()
 
-query0 = "delete from Future_Multiplier where RecordDate=\'{}\'".format(date)
+query0 = "delete from Future_Multiplier where RecordDate='{}'".format(date)
 dbsa.ExecNonQuery(query0)
 
-query1 = "select * from FUT_MULTIPLIER where RecordDate=\'{}\'".format(date)
+query1 = "select * from FUT_MULTIPLIER where RecordDate='{}'".format(date)
 record = dbfu.ExecQuery(query1)
 
 for i in record:

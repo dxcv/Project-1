@@ -12,7 +12,7 @@ uqer.Client(token='f1b9bea1d0b4e489c5ab9b69c3e2326a1bee6057af858067dbd1546453f42
 
 #
 dbsa = MSSQL.DB_ScenarioAnalysis()
-today = Constant.date
+today = '20180821'#Constant.date
 
 # 清空原有表内数据
 query = "delete from HistData_Stock"

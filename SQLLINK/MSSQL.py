@@ -61,6 +61,10 @@ class DB_DataCenter_Analysis(MSSQL):
     def __init__(self):
         MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='DataCenter_Analysis')
 
+class DB_DataCenter_Uqer(MSSQL):
+    def __init__(self):
+        MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='DataCenter_Uqer')
+
 
 if __name__ == "__main__":
     print("test")
