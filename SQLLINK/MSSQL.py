@@ -32,11 +32,6 @@ class MSSQL(object):
     def __del__(self):  # 析构函数
         self.conn.close()
         return
-#
-# class DB_VaR(MSSQL):
-#     def __init__(self):
-#         MSSQL.__init__(self, host='127.0.0.1', user='sa', pwd='ZAQ!2wsxCDE#', db='VaR')
-#
 
 
 
