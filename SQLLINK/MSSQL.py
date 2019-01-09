@@ -7,7 +7,7 @@
 
 
 import pymssql
-import pandas
+#测试github同步
 
 # 数据库类
 class MSSQL(object):
