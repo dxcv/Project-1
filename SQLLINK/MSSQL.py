@@ -7,7 +7,7 @@
 
 
 import pymssql
-
+import pandas
 
 # 数据库类
 class MSSQL(object):
