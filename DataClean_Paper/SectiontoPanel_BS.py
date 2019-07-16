@@ -13,7 +13,7 @@ import math
 pathfromNumber = r'D:\Paper\Data\Original_BankScope\Number'
 pathfromRatio = r'D:\Paper\Data\Original_BankScope\Ratios'
 pathfromTS = r'D:\Paper\Data\Original_BankScope\TimeSeries'
-pathbankname = r'D:\Paper\Data\Original_BankScope\BankName.xlsx'
+pathbankname = r'D:\Paper\Data\Original_BankScope\BankName_all.xlsx'
 pathto = r'D:\Paper\Data\Cleaned'
 
 files = os.listdir(pathfromNumber)
@@ -70,34 +70,34 @@ result = pd.DataFrame(result,dtype=np.float)
 # result['MainOperatingIncome'] = result['OperatingIncome'] - result['OtherOperatingIncome']
 # result['MainInterestIncome'] = result['TotalInterestIncome'] - result['OtherInterestIncome']
 
-result['II'] = result['Interestincomeoncustomerloans'] + result['Interestincomeoninterbankloans'] + result['Interestincomeonstock']+result['OtherInterestIncome']
+# result['II'] = result['Interestincomeoncustomerloans'] + result['Interestincomeoninterbankloans'] + result['Interestincomeonstock']+result['OtherInterestIncome']
 result['NII'] = result['FeeandCommission']
 # result['NII'] = result['OperatingIncome']+result['OtherInterestIncome']-result['II']
 
 result['NIIR'] = result['NII']/result['OperatingIncome']*100
 
 # result['NIIR2'] = result['NIIR']*result['NIIR']
-result['NDI'] =  result['NII'] / result['II']*100
+# result['NDI'] =  result['NII'] / result['II']*100
 
-result['TOFER'] = result['Totaloffbanlancesheetexposure']/result['TA']*100
+# result['TOFER'] = result['Totaloffbanlancesheetexposure']/result['TA']*100
 
-result['LnTA'] = [math.log(x) for x in result['TA']]
-result['LnM2'] = [math.log(x) for x in result['M2']]
-result['LnGM2'] = [math.log(x) for x in result['GM2']]
-result['LnNIIR'] = [abs(math.log(abs(x))) for x in result['GM2']]
+# result['LnTA'] = [math.log(x) for x in result['TA']]
+# result['LnM2'] = [math.log(x) for x in result['M2']]
+# result['LnGM2'] = [math.log(x) for x in result['GM2']]
+# result['LnNIIR'] = [abs(math.log(abs(x))) for x in result['GM2']]
 
-result['DPL'] = result['Loans']/result['TotalDeposit']*100
-
-result['ILR'] = result['ILGLR']*result['GrossLoans']/result['Loans']*100
+# result['DPL'] = result['Loans']/result['TotalDeposit']*100
+#
+# result['ILR'] = result['ILGLR']*result['GrossLoans']/result['Loans']*100
 result['FAR'] = result['FixedAssets']/result['TA']*100
 
-result['z1'] = result['ROA']-result['CAR']
-var = pd.DataFrame(result.groupby(by=result.index)['ROA'].mean())
-var.columns = ['Roa_mean']
-result = pd.merge(result,var,how='left',left_on='BankName',right_index=True)
-result['Z'] = abs(result['z1']-result['Roa_mean'])
+# result['z1'] = result['ROA']-result['CAR']
+# var = pd.DataFrame(result.groupby(by=result.index)['ROA'].mean())
+# var.columns = ['Roa_mean']
+# result = pd.merge(result,var,how='left',left_on='BankName',right_index=True)
+# result['Z'] = abs(result['z1']-result['Roa_mean'])
 
-result['LnZ'] = [math.log(x) for x in result['Z']]
+# result['LnZ'] = [math.log(x) for x in result['Z']]
 # result['NII_DLMI'] = result['NII']*result['DLMI']
 # result['NII_NDLMI'] = result['NII']*result['NDLMI']
 # result['NII_MI'] = result['NII']*result['MI']
@@ -120,5 +120,5 @@ result['LnZ'] = [math.log(x) for x in result['Z']]
 
 result.dropna(how='all')
 
-result.to_excel(pathto+'\\Sorted_BS.xlsx',index=True)
-result.to_stata(pathto+'\\Dataforreg_BS.dta',write_index=False)
+result.to_excel(pathto+'\\BankName_all.xlsx',index=True)
+result.to_stata(pathto+'\\BankName_all.dta',write_index=False)
